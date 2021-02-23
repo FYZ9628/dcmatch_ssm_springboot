@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dcmatch_ssm_springboot.mapper.TeacherMapper">
+
+    <!-- 通用查询映射结果  数组结果 -->
+    <resultMap id="BaseResultMap" type="com.example.dcmatch_ssm_springboot.model.Teacher">
+        <id column="id" property="id" />
+        <result column="sex" property="sex" />
+        <result column="email" property="email" />
+        <result column="school" property="school" />
+        <result column="entry_date" property="entryDate" />
+        <result column="academy" property="academy" />
+        <result column="professional_title" property="professionalTitle" />
+        <result column="education" property="education" />
+        <result column="id_img" property="idImg" />
+        <association  property="user"
+                      javaType="com.example.dcmatch_ssm_springboot.model.User">
+            <id column="user_id" property="id" />
+            <result column="account" property="account" />
+            <result column="phone" property="phone" />
+            <result column="password" property="password" />
+            <result column="name" property="name" />
+            <result column="type" property="type" />
+        </association>
+
+    </resultMap>
+
+    <!--增加一个对象-->
+    <insert id="add" parameterType="com.example.dcmatch_ssm_springboot.model.Teacher">
+        insert into dcmdb.teacher (user_id,sex,email,school,entry_date,academy,professional_title,education,id_img)
+        values (#{user.id},#{sex},#{email},#{school},#{entryDate},#{academy},#{professionalTitle},#{education},#{idImg});
+    </insert>
+
+    <!--根据id删除一个对象-->
+    <delete id="deleteById" parameterType="com.example.dcmatch_ssm_springboot.model.Teacher">
+       delete from dcmdb.teacher where id=#{id}
+    </delete>
+
+    <!--根据id更新对象信息 -->
+    <update id="update" parameterType="com.example.dcmatch_ssm_springboot.model.Teacher">
+        update dcmdb.teacher
+        set user_id=#{user.id},sex=#{sex},email=#{email},school=#{school}
+        ,entry_date=#{entryDate},academy=#{academy}
+        ,professional_title=#{professionalTitle},education=#{education},id_img=#{idImg}
+        where id=#{id};
+    </update>
+
+    <!--查询全部-->
+    <select id="getAllTeacher" resultMap="BaseResultMap">
+        select *
+        from  dcmdb.teacher t, dcmdb.user u
+        where t.user_id=u.id
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_id 查询,返回一个对象  -->
+    <select id="findById" resultMap="BaseResultMap">
+        select *
+        from  dcmdb.teacher t, dcmdb.user u
+        where t.user_id=u.id
+        and t.id=#{id}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_user_account 查询,返回一个对象  -->
+    <select id="findByUser_Account" resultMap="BaseResultMap">
+        select *
+        from  dcmdb.teacher t, dcmdb.user u
+        where t.user_id=u.id
+        and u.account = #{account}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_user_name 和 student_user_password 查询,返回一个对象  -->
+    <select id="findAllByUser_NameLikeOrUser_AccountLike" resultMap="BaseResultMap">
+        select *
+        from  dcmdb.teacher t, dcmdb.user u
+        where t.user_id=u.id
+        and u.name like '%${keywords}%'
+        or t.user_id=u.id and u.account like '%${keywords}%'
+    </select>
+
+</mapper>

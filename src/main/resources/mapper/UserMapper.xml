@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dcmatch_ssm_springboot.mapper.UserMapper">
+
+    <!-- 通用查询映射结果  数组结果 -->
+    <resultMap id="UserResultMap" type="com.example.dcmatch_ssm_springboot.model.User">
+        <id column="id" property="id" />
+        <result column="account" property="account" />
+        <result column="phone" property="phone" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="type" property="type" />
+    </resultMap>
+
+    <!--增加一个对象-->
+    <insert id="add" parameterType="com.example.dcmatch_ssm_springboot.model.User">
+        insert into dcmdb.user (account, phone, password, name, type)
+        values (#{account},#{phone},#{password},#{name},#{type});
+    </insert>
+
+    <!--根据id删除一个对象-->
+    <delete id="deleteById" parameterType="com.example.dcmatch_ssm_springboot.model.User">
+       delete from dcmdb.user where id=#{id}
+    </delete>
+
+    <!--根据id更新对象信息 -->
+    <update id="update" parameterType="com.example.dcmatch_ssm_springboot.model.User">
+        update dcmdb.user
+        set phone=#{phone},password=#{password},name=#{name},type=#{type}
+        where account=#{account};
+    </update>
+
+
+    <!--查询全部-->
+    <select id="getAllUser" resultMap="UserResultMap">
+        select * from dcmdb.user
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据书本 id 查询,返回一个对象  -->
+    <select id="findById" resultType="com.example.dcmatch_ssm_springboot.model.User" parameterType="java.lang.Integer">
+        select * from  dcmdb.user where id=#{id}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 account 查询,返回一个对象  -->
+    <select id="findByAccount" resultType="com.example.dcmatch_ssm_springboot.model.User">
+        select * from  dcmdb.user where account=#{account}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 account 和 password 查询,返回一个对象  -->
+    <select id="getByAccountAndPassword" resultType="com.example.dcmatch_ssm_springboot.model.User">
+        select * from  dcmdb.user where account=#{account} and password=#{password}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 account 和 name 查询,返回一个对象  -->
+    <select id="getByAccountAndName" resultType="com.example.dcmatch_ssm_springboot.model.User">
+        select * from  dcmdb.user where account=#{account} and name=#{name}
+    </select>
+
+
+    <!--  精确查询  -->
+    <!--根据书本 id 查询,返回一本书  一个对象  -->
+    <select id="findByPhone" resultType="com.example.dcmatch_ssm_springboot.model.User">
+        select * from  dcmdb.user where phone=#{phone}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 phone 和 password 查询,返回一个对象  -->
+    <select id="getByPhoneAndPassword" resultType="com.example.dcmatch_ssm_springboot.model.User">
+        select * from  dcmdb.user where phone=#{phone} and password=#{password}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 phone 和 name 查询,返回一个对象  -->
+    <select id="getByPhoneAndName" resultType="com.example.dcmatch_ssm_springboot.model.User">
+        select * from  dcmdb.user where phone=#{phone} and name=#{name}
+    </select>
+
+    <!--  模糊查询  -->
+    <!--根据书名查询,返回所书-->
+    <select id="findAllByNameLike" resultMap="UserResultMap">
+        select * from  dcmdb.user where name like '%${name}%'
+    </select>
+</mapper>

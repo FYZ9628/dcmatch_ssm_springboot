@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dcmatch_ssm_springboot.mapper.BannerMapper">
+
+    <!-- 通用查询映射结果  数组结果 -->
+    <resultMap id="BaseResultMap" type="com.example.dcmatch_ssm_springboot.model.Banner">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="src" property="src" />
+    </resultMap>
+
+
+    <!--增加一个对象-->
+    <insert id="add" parameterType="com.example.dcmatch_ssm_springboot.model.Banner">
+        insert into dcmdb.banner (name,src)
+        values (#{name},#{src});
+    </insert>
+
+    <!--根据id删除一个对象-->
+    <delete id="deleteById" parameterType="com.example.dcmatch_ssm_springboot.model.Banner">
+       delete from dcmdb.banner where id=#{id}
+    </delete>
+
+    <!--根据id更新对象信息 -->
+    <update id="update" parameterType="com.example.dcmatch_ssm_springboot.model.Banner">
+        update dcmdb.banner
+        set name=#{name},src=#{src}
+        where id=#{id};
+    </update>
+
+    <!--查询全部-->
+    <select id="getAllBanner" resultMap="BaseResultMap">
+        select * from dcmdb.banner
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据名称查询,返回一个对象  -->
+    <select id="findBannerByName" resultType="com.example.dcmatch_ssm_springboot.model.Banner">
+        select * from  dcmdb.banner where name=#{name}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据书本 id 查询,返回一本书  一个对象  -->
+    <select id="findBannerById" resultType="com.example.dcmatch_ssm_springboot.model.Banner">
+        select * from  dcmdb.banner where id=#{id}
+    </select>
+
+    <!--  模糊查询  -->
+    <!--根据书名查询,返回所书-->
+    <select id="findAllByNameLike" resultMap="BaseResultMap">
+        select * from  dcmdb.banner where name like '%${name}%'
+    </select>
+
+</mapper>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dcmatch_ssm_springboot.mapper.RegisterMapper">
+
+    <!-- 通用查询映射结果  数组结果 -->
+    <resultMap id="BaseResultMap" type="com.example.dcmatch_ssm_springboot.model.Register">
+        <id column="id" property="id" />
+        <result column="phone" property="phone" />
+        <result column="password" property="password" />
+    </resultMap>
+
+
+    <!--增加一个对象-->
+    <insert id="add" parameterType="com.example.dcmatch_ssm_springboot.model.Register">
+        insert into dcmdb.register (phone,password)
+        values (#{phone},#{password});
+    </insert>
+
+    <!--根据id删除一个对象-->
+    <delete id="deleteById" parameterType="com.example.dcmatch_ssm_springboot.model.Register">
+       delete from dcmdb.register where id=#{id}
+    </delete>
+
+    <!--根据id更新对象信息 -->
+    <update id="update" parameterType="com.example.dcmatch_ssm_springboot.model.Register">
+        update dcmdb.register
+        set phone=#{phone},password=#{password}
+        where id=#{id};
+    </update>
+
+    <!--查询全部-->
+    <select id="getAllRegister" resultMap="BaseResultMap">
+        select * from dcmdb.register
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据名称查询,返回一个对象  -->
+    <select id="findByPhone" resultType="com.example.dcmatch_ssm_springboot.model.Register">
+        select * from  dcmdb.register where phone=#{phone}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据书本 id 查询,返回一本书  一个对象  -->
+    <select id="findById" resultType="com.example.dcmatch_ssm_springboot.model.Register">
+        select * from  dcmdb.register where id=#{id}
+    </select>
+
+    <!--  模糊查询  -->
+    <!--根据书名查询,返回所书-->
+    <select id="findByPhoneAndPassword" resultMap="BaseResultMap">
+        select * from  dcmdb.register where phone=#{phone} and password=#{password}
+    </select>
+
+</mapper>
