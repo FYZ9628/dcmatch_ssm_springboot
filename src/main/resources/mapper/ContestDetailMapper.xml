@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dcmatch_ssm_springboot.mapper.ContestDetailMapper">
+
+    <!-- 通用查询映射结果  数组结果 -->
+    <resultMap id="BaseResultMap" type="com.example.dcmatch_ssm_springboot.model.ContestDetail">
+        <id column="id" property="id" />
+        <result column="contest_title" property="contestTitle" />
+        <result column="contest_content" property="contestContent" />
+        <result column="sign_up_start_time" property="signUpStartTime" />
+        <result column="sign_up_end_time" property="signUpEndTime" />
+        <result column="publish_time" property="publishTime" />
+        <result column="place" property="place" />
+        <result column="hold_date" property="holdDate" />
+        <result column="hold_start_time" property="holdStartTime" />
+        <result column="hold_end_time" property="holdEndTime" />
+        <result column="type" property="type" />
+        <result column="upper_limit" property="upperLimit" />
+        <result column="state" property="state" />
+        <association  property="organizer"
+                      javaType="com.example.dcmatch_ssm_springboot.model.Organizer">
+            <id column="organizer_id" property="id" />
+            <result column="email" property="email" />
+            <result column="school" property="school" />
+            <result column="establish_date" property="establishDate" />
+            <result column="school_type" property="schoolType" />
+            <result column="school_running_type" property="schoolRunningType" />
+            <result column="id_img" property="idImg" />
+            <association  property="user"
+                          javaType="com.example.dcmatch_ssm_springboot.model.User">
+                <id column="user_id" property="id" />
+                <result column="account" property="account" />
+                <result column="phone" property="phone" />
+                <result column="password" property="password" />
+                <result column="name" property="name" />
+                <result column="utype" property="type" />
+            </association>
+        </association>
+
+    </resultMap>
+
+    <!--增加一个对象-->
+    <insert id="add" parameterType="com.example.dcmatch_ssm_springboot.model.ContestDetail">
+        insert into dcmdb.contest_detail (contest_title,organizer_id,contest_content,sign_up_start_time
+        ,sign_up_end_time,publish_time,place,hold_date,hold_start_time,hold_end_time,type,upper_limit,state)
+        values (#{contestTitle},#{organizer.id},#{contestContent},#{signUpStartTime},#{signUpEndTime}
+        ,#{publishTime},#{place},#{holdDate},#{holdStartTime},#{holdEndTime},#{type},#{upperLimit},#{state});
+    </insert>
+
+    <!--根据id删除一个对象-->
+    <delete id="deleteById" parameterType="com.example.dcmatch_ssm_springboot.model.ContestDetail">
+       delete from dcmdb.contest_detail where id=#{id}
+    </delete>
+
+    <!--根据id更新对象信息 -->
+    <update id="update" parameterType="com.example.dcmatch_ssm_springboot.model.ContestDetail">
+        update dcmdb.contest_detail
+        set contest_title=#{contestTitle},organizer_id=#{organizer.id},contest_content=#{contestContent}
+        ,sign_up_start_time=#{signUpStartTime},sign_up_end_time=#{signUpEndTime},publish_time=#{publishTime}
+        ,place=#{place},hold_date=#{holdDate},hold_start_time=#{holdStartTime},hold_end_time=#{holdEndTime}
+        ,type=#{type},upper_limit=#{upperLimit},state=#{state}
+        where id=#{id};
+    </update>
+
+    <!--查询全部-->
+    <!--  解决重名的方法  https://www.cnblogs.com/deng-cc/p/9337601.html  -->
+    <select id="getAllContestDetail" resultMap="BaseResultMap">
+        select *, u.type as utype
+        from  dcmdb.contest_detail c, dcmdb.organizer o, dcmdb.user u
+        where c.organizer_id=o.id and o.user_id=u.id
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_id 查询,返回一个对象  -->
+    <select id="findById" resultMap="BaseResultMap">
+        select *, u.type as utype
+        from  dcmdb.contest_detail c, dcmdb.organizer o, dcmdb.user u
+        where c.organizer_id=o.id and o.user_id=u.id and c.id=#{id}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_id 查询,返回一个对象  -->
+    <select id="findByContestTitle" resultMap="BaseResultMap">
+        select *, u.type as utype
+        from  dcmdb.contest_detail c, dcmdb.organizer o, dcmdb.user u
+        where c.organizer_id=o.id and o.user_id=u.id and contest_title=#{contestTitle}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_user_account 查询,返回一个对象  -->
+    <select id="findAllByOrganizer_User_Account" resultMap="BaseResultMap">
+        select *, u.type as utype
+        from  dcmdb.contest_detail c, dcmdb.organizer o, dcmdb.user u
+        where c.organizer_id=o.id and o.user_id=u.id and u.account = #{account}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_user_name 和 student_user_password 查询,返回一个对象  -->
+    <select id="findAllByContestTitleLikeOrOrganizer_User_NameLike" resultMap="BaseResultMap">
+        select *, u.type as utype
+        from  dcmdb.contest_detail c, dcmdb.organizer o, dcmdb.user u
+        where c.organizer_id=o.id and o.user_id=u.id and contest_title like '%${keywords}%'
+        or c.organizer_id=o.id and o.user_id=u.id and u.name like '%${keywords}%'
+    </select>
+
+</mapper>
