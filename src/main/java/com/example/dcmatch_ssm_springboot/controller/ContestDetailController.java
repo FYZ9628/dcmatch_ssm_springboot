@@ -17,36 +17,6 @@ public class ContestDetailController {
     @Autowired
     ContestDetailService contestDetailService;
 
-    @GetMapping("/api/getAllContestDetail")
-    public List<ContestDetail> getAllContestDetail() throws Exception {
-        return contestDetailService.getAllContestDetail();
-    }
-
-    @PostMapping("/api/searchContestDetail")
-    public List<ContestDetail> findAllByContestTitleLike(@RequestBody Search s) throws Exception {
-
-        return contestDetailService.findAllByContestTitleLikeOrOrganizer_User_NameLike(s.getKeywords());
-    }
-
-    @PostMapping("/api/searchContestDetailById")
-    public ContestDetail findById(@RequestBody SearchByInt s) throws Exception {
-
-        return contestDetailService.findById(s.getKeywords());
-    }
-
-
-    @PostMapping("/api/searchContestDetailByContestTitle")
-    public ContestDetail findByContestTitle(@RequestBody Search s) throws Exception {
-
-        return contestDetailService.findByContestTitle(s.getKeywords());
-    }
-
-    @PostMapping("/api/searchContestDetailByOrganizerAccount")
-    public List<ContestDetail> findAllByOrganizerAccount(@RequestBody Search s) throws Exception {
-
-        return contestDetailService.findAllByOrganizer_User_Account(s.getKeywords());
-    }
-
     @PostMapping("/api/addContestDetail")
     public ContestDetail addContestDetail(@RequestBody ContestDetail contestDetail) throws Exception {
 
@@ -89,4 +59,35 @@ public class ContestDetailController {
             return new Result(400);
         }
     }
+
+    @GetMapping("/api/getAllContestDetail")
+    public List<ContestDetail> getAllContestDetail() throws Exception {
+        return contestDetailService.getAllContestDetail();
+    }
+
+    @PostMapping("/api/searchContestDetail")
+    public List<ContestDetail> findAllByContestTitleLike(@RequestBody Search s) throws Exception {
+
+        return contestDetailService.findAllByContestTitleLikeOrOrganizer_User_NameLike(s.getKeywords());
+    }
+
+    @PostMapping("/api/searchContestDetailById")
+    public ContestDetail findById(@RequestBody SearchByInt s) throws Exception {
+
+        return contestDetailService.findById(s.getKeywords());
+    }
+
+
+    @PostMapping("/api/searchContestDetailByContestTitle")
+    public ContestDetail findByContestTitle(@RequestBody Search s) throws Exception {
+
+        return contestDetailService.findByContestTitle(s.getKeywords());
+    }
+
+    @PostMapping("/api/searchContestDetailByOrganizerAccount")
+    public List<ContestDetail> findAllByOrganizerAccount(@RequestBody Search s) throws Exception {
+
+        return contestDetailService.findAllByOrganizer_User_Account(s.getKeywords());
+    }
+
 }

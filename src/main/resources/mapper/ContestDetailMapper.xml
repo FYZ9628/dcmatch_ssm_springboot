@@ -56,7 +56,7 @@
     <update id="update" parameterType="com.example.dcmatch_ssm_springboot.model.ContestDetail">
         update dcmdb.contest_detail
         set contest_title=#{contestTitle},organizer_id=#{organizer.id},contest_content=#{contestContent}
-        ,sign_up_start_time=#{signUpStartTime},sign_up_end_time=#{signUpEndTime},publish_time=#{publishTime}
+        ,sign_up_start_time=#{signUpStartTime},sign_up_end                                                                                                                                         _time=#{signUpEndTime},publish_time=#{publishTime}
         ,place=#{place},hold_date=#{holdDate},hold_start_time=#{holdStartTime},hold_end_time=#{holdEndTime}
         ,type=#{type},upper_limit=#{upperLimit},state=#{state}
         where id=#{id};

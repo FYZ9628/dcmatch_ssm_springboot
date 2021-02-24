@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dcmatch_ssm_springboot.mapper.ContestMapper">
+
+    <!-- 通用查询映射结果  数组结果 -->
+    <resultMap id="BaseResultMap" type="com.example.dcmatch_ssm_springboot.model.Contest">
+        <id column="id" property="id" />
+        <result column="state" property="state" />
+        <result column="ticket_number" property="ticketNumber" />
+        <result column="score" property="score" />
+        <association  property="contestDetail"
+                      javaType="com.example.dcmatch_ssm_springboot.model.ContestDetail">
+            <id column="contest_id" property="id" />
+            <result column="contest_title" property="contestTitle" />
+            <result column="contest_content" property="contestContent" />
+            <result column="sign_up_start_time" property="signUpStartTime" />
+            <result column="sign_up_end_time" property="signUpEndTime" />
+            <result column="publish_time" property="publishTime" />
+            <result column="place" property="place" />
+            <result column="hold_date" property="holdDate" />
+            <result column="hold_start_time" property="holdStartTime" />
+            <result column="hold_end_time" property="holdEndTime" />
+            <result column="type" property="type" />
+            <result column="upper_limit" property="upperLimit" />
+            <result column="cdstate" property="state" />
+            <association  property="organizer"
+                          javaType="com.example.dcmatch_ssm_springboot.model.Organizer">
+                <id column="organizer_id" property="id" />
+                <result column="email" property="email" />
+                <result column="school" property="school" />
+                <result column="establish_date" property="establishDate" />
+                <result column="school_type" property="schoolType" />
+                <result column="school_running_type" property="schoolRunningType" />
+                <result column="id_img" property="idImg" />
+                <association  property="user"
+                              javaType="com.example.dcmatch_ssm_springboot.model.User">
+                    <id column="user_id" property="id" />
+                    <result column="account" property="account" />
+                    <result column="phone" property="phone" />
+                    <result column="password" property="password" />
+                    <result column="name" property="name" />
+                    <result column="utype" property="type" />
+                </association>
+            </association>
+        </association>
+        <association  property="student"
+                      javaType="com.example.dcmatch_ssm_springboot.model.Student">
+            <id column="student_id" property="id" />
+            <result column="sex" property="sex" />
+            <result column="email" property="email" />
+            <result column="school" property="school" />
+            <result column="admission_date" property="admissionDate" />
+            <result column="graduation_date" property="graduationDate" />
+            <result column="academy" property="academy" />
+            <result column="major" property="major" />
+            <result column="education" property="education" />
+            <result column="id_img" property="idImg" />
+            <association  property="user"
+                          javaType="com.example.dcmatch_ssm_springboot.model.User">
+                <id column="user_id" property="id" />
+                <result column="account" property="account" />
+                <result column="phone" property="phone" />
+                <result column="password" property="password" />
+                <result column="name" property="name" />
+                <result column="utype" property="type" />
+            </association>
+        </association>
+
+    </resultMap>
+
+    <!--增加一个对象-->
+    <insert id="add" parameterType="com.example.dcmatch_ssm_springboot.model.Contest">
+        insert into dcmdb.contest (contest_id,student_id,state,ticket_number,score)
+        values (#{contestDetail.id},#{student.id},#{state},#{ticketNumber},#{score});
+    </insert>
+
+    <!--根据id删除一个对象-->
+    <delete id="deleteById" parameterType="com.example.dcmatch_ssm_springboot.model.Contest">
+       delete from dcmdb.contest where id=#{id}
+    </delete>
+
+    <!--根据id更新对象信息 -->
+    <update id="update" parameterType="com.example.dcmatch_ssm_springboot.model.Contest">
+        update dcmdb.contest
+        set contest_id=#{contestDetail.id},student_id=#{student.id},state=#{state}
+        ,ticket_number=#{ticketNumber},score=#{score}
+        where id=#{id};
+    </update>
+
+    <!--查询全部-->
+    <!--  解决重名的方法  https://www.cnblogs.com/deng-cc/p/9337601.html  -->
+    <!--  ORDER BY c.id ASC  排序方法  -->
+    <!--  写上 dcmdb.student s 是因为要拿到student的id  -->
+    <select id="getAllContest" resultMap="BaseResultMap">
+        select *, cd.state as cdstate, u.type as utype
+        from dcmdb.contest c,dcmdb.contest_detail cd,dcmdb.organizer o,dcmdb.user u,dcmdb.student s
+        where c.contest_id=cd.id and cd.organizer_id=o.id and o.user_id=u.id
+        ORDER BY c.id ASC
+    </select>
+
+
+    <!--  精确查询  -->
+    <!--根据 student_id 查询,返回一个对象  -->
+    <select id="findById" resultMap="BaseResultMap">
+        select *, cd.state as cdstate, u.type as utype
+        from  dcmdb.contest c,dcmdb.contest_detail cd,dcmdb.organizer o,dcmdb.user u,dcmdb.student s
+        where c.contest_id=cd.id and cd.organizer_id=o.id and o.user_id=u.id and c.id=#{id}
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_id 查询,返回一个对象  -->
+    <select id="findAllByContestDetail_Id" resultMap="BaseResultMap">
+        select *, cd.state as cdstate, u.type as utype
+        from  dcmdb.contest c,dcmdb.contest_detail cd,dcmdb.organizer o,dcmdb.user u,dcmdb.student s
+        where c.contest_id=cd.id and cd.organizer_id=o.id and o.user_id=u.id and cd.id=#{id}
+        ORDER BY c.id ASC
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_user_account 查询,返回一个数组  -->
+    <select id="findAllByStudent_User_Account" resultMap="BaseResultMap">
+        select *, cd.state as cdstate, u.type as utype
+        from  dcmdb.contest c,dcmdb.contest_detail cd,dcmdb.organizer o,dcmdb.student s,dcmdb.user u
+        where c.contest_id=cd.id and cd.organizer_id=o.id and c.student_id=s.id and s.user_id=u.id and u.account=#{account}
+        ORDER BY c.id ASC
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 ContestDetail_Organizer_User_Account 查询,返回一个数组  -->
+    <select id="findAllByContestDetail_Organizer_User_Account" resultMap="BaseResultMap">
+        select *, cd.state as cdstate, u.type as utype
+        from  dcmdb.contest c,dcmdb.contest_detail cd,dcmdb.organizer o,dcmdb.user u,dcmdb.student s
+        where c.contest_id=cd.id and cd.organizer_id=o.id and o.user_id=u.id and u.account=#{account}
+        ORDER BY c.id ASC
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_user_name 和 student_user_password 查询,返回一个对象  -->
+    <!-- searchContest_for_Student  -->
+    <select id="findAllByContestDetail_ContestTitleLikeOrContestDetail_Organizer_User_AccountLike" resultMap="BaseResultMap">
+        select *, cd.state as cdstate, u.type as utype
+        from  dcmdb.contest c,dcmdb.contest_detail cd,dcmdb.organizer o,dcmdb.user u,dcmdb.student s
+        where c.contest_id=cd.id and cd.organizer_id=o.id and o.user_id=u.id and cd.contest_title like '%${keywords}%'
+        or c.contest_id=cd.id and cd.organizer_id=o.id and o.user_id=u.id and u.account like '%${keywords}%'
+        ORDER BY c.id ASC
+    </select>
+
+    <!--  精确查询  -->
+    <!--根据 student_user_name 和 student_user_password 查询,返回一个对象  -->
+    <select id="findAllByContestDetail_ContestTitleLikeOrStudent_User_AccountLike" resultMap="BaseResultMap">
+        select *, cd.state as cdstate, u.type as utype
+        from  dcmdb.contest c,dcmdb.contest_detail cd,dcmdb.organizer o,dcmdb.student s,dcmdb.user u
+        where c.contest_id=cd.id and cd.organizer_id=o.id and c.student_id=s.id
+        and s.user_id=u.id and cd.contest_title like '%${keywords}%'
+        or c.contest_id=cd.id and cd.organizer_id=o.id and c.student_id=s.id
+        and s.user_id=u.id and u.account like '%${keywords}%'
+        ORDER BY c.id ASC
+    </select>
+
+</mapper>
