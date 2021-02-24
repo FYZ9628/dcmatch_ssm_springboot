@@ -101,6 +101,7 @@ public class ContestController {
         return contestList;
     }
 
+    //有 student，没有 Organizer（在ContestDetail中）
     @PostMapping("/api/searchContestByStudentAccount")
     public List<Contest> findAllByStudentAccount(@RequestBody Search s) throws Exception {
 
@@ -112,6 +113,7 @@ public class ContestController {
         return contestList;
     }
 
+    //有 Organizer（在ContestDetail中） ，没有 student
     @PostMapping("/api/searchContestByOrganizerAccount")
     public List<Contest> findAllByOrganizerAccount(@RequestBody Search s) throws Exception {
 

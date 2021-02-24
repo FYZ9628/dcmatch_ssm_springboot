@@ -15,18 +15,6 @@ public class RegisterController {
     @Autowired
     RegisterService registerService;
 
-    @GetMapping("/api/getAllRegister")
-    public List<Register> getAllRegister() throws Exception {
-        return registerService.getAllRegister();
-    }
-
-    @PostMapping("/api/searchRegister")
-    public Register findByPhone(@RequestBody Search s) throws Exception {
-
-        return registerService.findByPhone(s.getKeywords());
-    }
-
-
     @PostMapping("/api/addRegister")
     public Result addRegister(@RequestBody Register register) throws Exception {
 
@@ -38,7 +26,6 @@ public class RegisterController {
             return new Result(200);
         }
     }
-
 
     @PostMapping("/api/updateRegister")
     public Register updateRegister(@RequestBody Register register) throws Exception {
@@ -81,5 +68,16 @@ public class RegisterController {
             //   删除失败返回码 400
             return new Result(400);
         }
+    }
+
+    @GetMapping("/api/getAllRegister")
+    public List<Register> getAllRegister() throws Exception {
+        return registerService.getAllRegister();
+    }
+
+    @PostMapping("/api/searchRegister")
+    public Register findByPhone(@RequestBody Search s) throws Exception {
+
+        return registerService.findByPhone(s.getKeywords());
     }
 }
