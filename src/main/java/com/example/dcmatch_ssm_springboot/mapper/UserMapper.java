@@ -13,27 +13,27 @@ public interface UserMapper {
 
     int add(User user);
 
-    int deleteById(@Param("id") int id);
+    int deleteById(int id);
 
     int update(User user);
 
     List<User> getAllUser();
 
-    User findById(@Param("id") int id);
+    User findById(int id);
 
-    User selectById(@Param("id") int id);
+    User selectById(int id);
 
-    User findByAccount(@Param("account") String account);
+    User findByAccount(String account);
 
     User getByAccountAndPassword(@Param("account") String account,@Param("password") String password);
 
-    User getByAccountAndName(String account,String name);
+    User getByAccountAndName(@Param("account") String account, @Param("name") String name);
 
-    User findByPhone(@Param("phone") String phone);
+    User findByPhone(String phone);
 
     User getByPhoneAndPassword(@Param("phone") String phone, @Param("password") String password);
 
     User getByPhoneAndName(@Param("phone") String phone, @Param("name") String name);
 
-    List<User> findAllByNameLike(@Param("name") String name);
+    List<User> findAllByNameLike(String name);
 }

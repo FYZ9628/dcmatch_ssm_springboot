@@ -22,5 +22,5 @@ public interface RegisterMapper {
 
     Register findByPhone(String phone);
 
-    Register findByPhoneAndPassword(String phone, String password);
+    Register findByPhoneAndPassword(@Param("phone") String phone, @Param("password") String password);
 }
