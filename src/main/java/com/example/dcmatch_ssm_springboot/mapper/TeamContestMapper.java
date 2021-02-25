@@ -2,6 +2,7 @@ package com.example.dcmatch_ssm_springboot.mapper;
 
 import com.example.dcmatch_ssm_springboot.model.TeamContest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,5 +30,6 @@ public interface TeamContestMapper {
 
     List<TeamContest> findAllByTeamName(String teamName);
 
-    List<TeamContest> findAllByTeamNameAndContestDetail_Id(String teamName, int contestDetailId);
+    //当有两个参数以上时要加 注解  @Param
+    List<TeamContest> findAllByTeamNameAndContestDetail_Id(@Param("teamName") String teamName, @Param("contestDetailId") int contestDetailId);
 }
